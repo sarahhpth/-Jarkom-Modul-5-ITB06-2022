@@ -135,14 +135,14 @@ service bind9 restart
 #No. 3 Reject bila terdapat PING ICMP Lebih dari 2
 iptables -A INPUT -p icmp -m connlimit --connlimit-above 2 --connlimit-mask 0 -j DROP
 #No. 4 Akses menuju web server (garden dan SSS)
-#garden
-iptables -A OUTPUT -d 192.217.7.138 -m time --weekdays Sat,Sun -j REJECT
-iptables -A OUTPUT -d 192.217.7.138 -m time --timestart 00:00 --timestop 06:59 --weekdays Mon,Tue,Wed,Thu,Fri -j REJECT
-iptables -A OUTPUT -d 192.217.7.138 -m time --timestart 16:01 --timestop 23:59 --weekdays Mon,Tue,Wed,Thu,Fri -j REJECT
-#sss
-iptables -A OUTPUT -d 192.217.7.139 -m time --weekdays Sat,Sun -j REJECT
-iptables -A OUTPUT -d 192.217.7.139 -m time --timestart 00:00 --timestop 06:59 --weekdays Mon,Tue,Wed,Thu,Fri -j REJECT
-iptables -A OUTPUT -d 192.217.7.139 -m time --timestart 16:01 --timestop 23:59 --weekdays Mon,Tue,Wed,Thu,Fri -j REJECT
+#forger
+iptables -A INPUT -s 192.217.7.0/25 -m time --weekdays Sat,Sun -j REJECT
+iptables -A INPUT -s 192.217.7.0/25 -m time --timestart 00:00 --timestop 06:59 --weekdays Mon,Tue,Wed,Thu,Fri -j REJECT
+iptables -A INPUT -s 192.217.7.0/25 -m time --timestart 16:01 --timestop 23:59 --weekdays Mon,Tue,Wed,Thu,Fri -j REJECT
+#desmond
+iptables -A INPUT -s 192.217.0.0/25 -m time --weekdays Sat,Sun -j REJECT
+iptables -A INPUT -s 192.217.0.0/25 -m time --timestart 00:00 --timestop 06:59 --weekdays Mon,Tue,Wed,Thu,Fri -j REJECT
+iptables -A INPUT -s 192.217.0.0/25 -m time --timestart 16:01 --timestop 23:59 --weekdays Mon,Tue,Wed,Thu,Fri -j REJECT
 
 
 }

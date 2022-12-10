@@ -401,4 +401,4 @@ iptables -A PREROUTING -t nat -p tcp -d 192.217.7.130 -j DNAT --to-destination 1
 
 ## Kendala
 
-Nomor 6 masih belum berhasil
+Nomor 6 masih belum berhasil  

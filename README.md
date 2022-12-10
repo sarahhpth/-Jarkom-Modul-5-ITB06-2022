@@ -11,12 +11,15 @@ Repository ini dibuat sebagai laporan resmi untuk pengerjaan [Soal Shift Modul 5
 ## Subnetting Menggunakan VLSM
 
 Pembagian subnet pada jaringan sebagai berikut:
+
 ![Image 1](image/subnet.jpg)
 
 Jumlan keseluruhan host adalah 1231 sehingga netmask keseluruhan adalah /21. Berikut adalah skema pembagian dalam tree.
+
 ![Image 2](image/vlsm_tree.png)
 
 Pembagian IP setiap subnet:
+
 ![Image 3](image/vlsm_table.jpg)
 
 ## Konfigurasi Node dan Routing
@@ -315,6 +318,7 @@ iptables -t nat -A POSTROUTING -o eth0 -j SNAT --to-source "$IPETH0" -s 192.217.
 ```
 
 Testing di salah satu client
+
 ![Image 4](image/soal1.jpg)
 
 ## Soal 2
@@ -346,6 +350,7 @@ iptables -A INPUT -p icmp -m connlimit --connlimit-above 2 --connlimit-mask 0 -j
 
 Testing
 Ping WISE/Eden di 3 klien yang berbeda: Forger, Desmond, lalu Briar
+
 ![Image 5](image/soal3.1.jpg)
 ![Image 6](image/soal3.2.jpg)
 ![Image 7](image/soal3.3.jpg)
@@ -371,8 +376,11 @@ iptables -A INPUT -s 192.217.0.0/25 -m time --timestart 16:01 --timestop 23:59 -
 ```
 
 Testing
+
 ![Image 8](image/soal4.1.jpg)
+
 Pada waktu tersebut seharusnya Garden tidak dapat diakses.
+
 ![Image 9](image/soal4.2.jpg)
 Desmond tidak dapat mengakses web server Garden.
 

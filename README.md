@@ -45,7 +45,8 @@ iface eth3 inet static
 
 Sebagai router yang langsung terhubung dengan NAT, tambahkan route berikut untuk menghubungkan setiap subnet.
 
-```route add -net 192.217.7.0 netmask 255.255.255.128 gw 192.217.7.146 #forger
+```
+route add -net 192.217.7.0 netmask 255.255.255.128 gw 192.217.7.146 #forger
 route add -net 192.217.0.0 netmask 255.255.252.0 gw 192.217.7.146 #desmond
 route add -net 192.217.7.128 netmask 255.255.255.248 gw 192.217.7.146 #eden & WISE
 
@@ -90,11 +91,15 @@ iface eth3 inet static
 ```
 
 Tambahkan juga route berikut untuk menghubungkan dengan router Strix
-`route add -net 0.0.0.0 netmask 0.0.0.0 gw 192.217.7.145`
+
+```
+route add -net 0.0.0.0 netmask 0.0.0.0 gw 192.217.7.145
+```
 
 Set up sebagai DHCP relay
 
-```apt update
+```
+apt update
 apt install isc-dhcp-relay -y
 echo '
 SERVERS="192.217.7.131"
@@ -126,11 +131,15 @@ iface eth3 inet static
 ```
 
 Tambahkan juga route berikut untuk menghubungkan dengan router Strix
-`route add -net 0.0.0.0 netmask 0.0.0.0 gw 192.217.7.149`
+
+```
+route add -net 0.0.0.0 netmask 0.0.0.0 gw 192.217.7.149
+```
 
 Set up sebagai DHCP relay
 
-```apt update
+```
+apt update
 apt install isc-dhcp-relay -y
 echo '
 SERVERS="192.217.7.131"
@@ -140,7 +149,7 @@ OPTIONS=""
 service isc-dhcp-relay restart
 ```
 
-### CLients (Forger, Desmond, Blackbell, Briar)
+### Clients (Forger, Desmond, Blackbell, Briar)
 
 ```
 auto eth0
@@ -149,7 +158,8 @@ iface eth0 inet dhcp
 
 ### Eden (DNS Server)
 
-```auto eth0
+```
+auto eth0
 iface eth0 inet static
 	address 192.217.7.130
 	netmask 255.255.255.248
@@ -158,13 +168,15 @@ iface eth0 inet static
 
 Set sebagai DNS server
 
-```apt update
+```
+apt update
 apt install bind9 -y
 ```
 
 Pada file `/etc/bind/named.conf.options` tambahkan:
 
-```options {
+```
+options {
         directory "/var/cache/bind";
         forwarders {
                 192.168.122.1;
@@ -181,7 +193,8 @@ service bind9 restart
 
 ### WISE (DHCP Server)
 
-```auto eth0
+```
+auto eth0
 iface eth0 inet static
 	address 192.217.7.131
 	netmask 255.255.255.248
@@ -190,19 +203,21 @@ iface eth0 inet static
 
 Set sebagai DHCP server
 
-```apt update
+```
+apt update
 apt install isc-dhcp-server -y
 ```
 
 Pada `/etc/default/isc-dhcp-server` tambahkan:
 
-```INTERFACES="eth0"
-
+```
+INTERFACES="eth0"
 ```
 
 Pada `/etc/dhcp/dhcpd.conf`tambahkan setiap subnet pada jaringan:
 
-```ddns-update-style none;
+```
+ddns-update-style none;
 option domain-name "example.org";
 option domain-name-servers ns1.example.org, ns2.example.org;
 default-lease-time 600;
@@ -252,7 +267,8 @@ service isc-dhcp-server restart
 
 ### Garden (Web Server)
 
-```auto eth0
+```
+auto eth0
 iface eth0 inet static
 	address 192.217.7.138
 	netmask 255.255.255.248
@@ -261,7 +277,8 @@ iface eth0 inet static
 
 Set sebagai web server
 
-```apt update
+```
+apt update
 apt install apache2 -y
 service apache2 start
 echo "$HOSTNAME" > /var/www/html/index.html
@@ -269,7 +286,8 @@ echo "$HOSTNAME" > /var/www/html/index.html
 
 ### SSS
 
-```auto eth0
+```
+auto eth0
 iface eth0 inet static
 	address 192.217.7.139
 	netmask 255.255.255.248
@@ -278,7 +296,8 @@ iface eth0 inet static
 
 Set sebagai web server
 
-```apt update
+```
+apt update
 apt install apache2 -y
 service apache2 start
 echo "$HOSTNAME" > /var/www/html/index.html

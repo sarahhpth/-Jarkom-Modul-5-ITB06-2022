@@ -399,6 +399,18 @@ iptables -A PREROUTING -t nat -p tcp -d 192.217.7.130 -m statistic --mode nth --
 iptables -A PREROUTING -t nat -p tcp -d 192.217.7.130 -j DNAT --to-destination 192.217.7.139:443
 ```
 
+## Soal 6
+Karena Loid ingin tau **paket apa saja** yang di-drop, maka di setiap node server dan router ditambahkan logging paket yang di-drop dengan standard syslog level.
+
+Untuk melihat packet apa saja yang di-*drop*, kami menggunakan perintah `LOG --log-level 5` pada akhir perintah saat akan di-*drop*
+
+Contohnya pada DHCP Server(**WISE**) dan DNS Server(**Eden**): 
+```
+iptables -A INPUT -p icmp -m connlimit --connlimit-above 2 --connlimit-mask 0 -j LOG --log-level 5
+
+iptables -A INPUT -p icmp -m connlimit --connlimit-above 2 --connlimit-mask 0 -j DROP
+```
+
 ## Kendala
 
-Nomor 6 masih belum berhasil  
+Tidak ada  

@@ -305,10 +305,87 @@ echo "$HOSTNAME" > /var/www/html/index.html
 
 ## Soal 1
 
+Agar topologi yang kalian buat dapat mengakses keluar, kalian diminta untuk mengkonfigurasi Strix menggunakan iptables, tetapi Loid tidak ingin menggunakan MASQUERADE.
+
+Strix
+
+```
+IPETH0="$(ip -br a | grep eth0 | awk '{print $NF}' | cut -d'/' -f1)"
+iptables -t nat -A POSTROUTING -o eth0 -j SNAT --to-source "$IPETH0" -s 192.217.0.0/21
+```
+
+Testing di salah satu client
+![Image 4](image/soal1.jpg)
+
 ## Soal 2
+
+Kalian diminta untuk melakukan drop semua TCP dan UDP dari luar Topologi kalian pada server yang merupakan DHCP Server demi menjaga keamanan.
+
+Strix
+
+```
+iptables -A FORWARD -d 192.217.7.131 -i eth0 -p tcp --dport 80 -j DROP
+iptables -A FORWARD -d 192.217.7.131 -i eth0 -p udp --dport 80 -j DROP
+```
 
 ## Soal 3
 
+Loid meminta kalian untuk membatasi DHCP dan DNS Server hanya boleh menerima maksimal 2 koneksi ICMP secara bersamaan menggunakan iptables, selebihnya didrop.
+
+WISE (DHCP Server)
+
+```
+iptables -A INPUT -p icmp -m connlimit --connlimit-above 2 --connlimit-mask 0 -j DROP
+```
+
+Eden (DNS Server)
+
+```
+iptables -A INPUT -p icmp -m connlimit --connlimit-above 2 --connlimit-mask 0 -j DROP
+```
+
+Testing
+Ping WISE/Eden di 3 klien yang berbeda: Forger, Desmond, lalu Briar
+![Image 5](image/soal3.1.jpg)
+![Image 6](image/soal3.2.jpg)
+![Image 7](image/soal3.3.jpg)
+
+Saat ping dari klien ketiga, hasil ping langusng berhenti.
+
 ## Soal 4
 
+Akses menuju Web Server hanya diperbolehkan disaat jam kerja yaitu Senin sampai Jumat pada pukul 07.00 - 16.00.
+
+Di web server Garden dan SSS tambahkan code berikut. Forger dan Desmond tidak dapat mengakses web server pada waktu yang ditentukan.
+
+```
+#forger
+iptables -A INPUT -s 192.217.7.0/25 -m time --weekdays Sat,Sun -j REJECT
+iptables -A INPUT -s 192.217.7.0/25 -m time --timestart 00:00 --timestop 06:59 --weekdays Mon,Tue,Wed,Thu,Fri -j REJECT
+iptables -A INPUT -s 192.217.7.0/25 -m time --timestart 16:01 --timestop 23:59 --weekdays Mon,Tue,Wed,Thu,Fri -j REJECT
+
+#desmond
+iptables -A INPUT -s 192.217.0.0/25 -m time --weekdays Sat,Sun -j REJECT
+iptables -A INPUT -s 192.217.0.0/25 -m time --timestart 00:00 --timestop 06:59 --weekdays Mon,Tue,Wed,Thu,Fri -j REJECT
+iptables -A INPUT -s 192.217.0.0/25 -m time --timestart 16:01 --timestop 23:59 --weekdays Mon,Tue,Wed,Thu,Fri -j REJECT
+```
+
+Testing
+![Image 8](image/soal4.1.jpg)
+Pada waktu tersebut seharusnya Garden tidak dapat diakses.
+![Image 9](image/soal4.2.jpg)
+Desmond tidak dapat mengakses web server Garden.
+
 ## Soal 5
+
+Karena kita memiliki 2 Web Server, Loid ingin Ostania diatur sehingga setiap request dari client yang mengakses Garden dengan port 80 akan didistribusikan secara bergantian pada SSS dan Garden secara berurutan dan request dari client yang mengakses SSS dengan port 443 akan didistribusikan secara bergantian pada Garden dan SSS secara berurutan.
+
+Ostania
+
+```
+iptables -A PREROUTING -t nat -p tcp -d 192.217.7.130 -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 192.217.7.139:80
+iptables -A PREROUTING -t nat -p tcp -d 192.217.7.130 -j DNAT --to-destination 192.217.7.138:80
+
+iptables -A PREROUTING -t nat -p tcp -d 192.217.7.130 -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 192.217.7.138:443
+iptables -A PREROUTING -t nat -p tcp -d 192.217.7.130 -j DNAT --to-destination 192.217.7.139:443
+```

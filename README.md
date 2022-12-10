@@ -283,3 +283,13 @@ apt install apache2 -y
 service apache2 start
 echo "$HOSTNAME" > /var/www/html/index.html
 ```
+
+## Soal 1
+
+## Soal 2
+
+## Soal 3
+
+## Soal 4
+
+## Soal 5

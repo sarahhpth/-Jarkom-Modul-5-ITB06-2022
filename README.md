@@ -382,6 +382,7 @@ Testing
 Pada waktu tersebut seharusnya Garden tidak dapat diakses.
 
 ![Image 9](image/soal4.2.jpg)
+
 Desmond tidak dapat mengakses web server Garden.
 
 ## Soal 5

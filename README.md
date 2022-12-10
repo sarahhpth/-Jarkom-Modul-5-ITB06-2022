@@ -398,3 +398,7 @@ iptables -A PREROUTING -t nat -p tcp -d 192.217.7.130 -j DNAT --to-destination 1
 iptables -A PREROUTING -t nat -p tcp -d 192.217.7.130 -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 192.217.7.138:443
 iptables -A PREROUTING -t nat -p tcp -d 192.217.7.130 -j DNAT --to-destination 192.217.7.139:443
 ```
+
+## Kendala
+
+Nomor 6 masih belum berhasil
